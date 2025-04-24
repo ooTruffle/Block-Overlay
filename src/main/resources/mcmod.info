@@ -1,0 +1,11 @@
+[
+{
+  "modid": "blockoverlay",
+  "name": "Block Overlay",
+  "description": "A custom overlay on blocks.",
+  "version": "4.0.3",
+  "mcversion": "1.8.9",
+  "authorList": ["Aycy"],
+  "credits": "powns | https://www.youtube.com/c/pownsdev"
+}
+]
