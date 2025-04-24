@@ -1,5 +1,7 @@
 package com.ootruffle.blockoverlay.utils;
 
+import com.ootruffle.blockoverlay.utils.enums.RenderMode;
+
 import java.util.Arrays;
 
 public class EnumUtils {
@@ -15,7 +17,7 @@ public class EnumUtils {
       return (T)enums[(fromName(clazz, name).ordinal() + 1) % enums.length];
    }
 
-   public static <T extends Enum<T>> T fromName(Class<T> clazz, String name) {
+   public static <T extends Enum<T>> T fromName(Class<RenderMode> clazz, boolean name) {
       return (T)Enum.valueOf(clazz, name);
    }
 
