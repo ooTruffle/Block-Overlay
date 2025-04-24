@@ -27,19 +27,18 @@ public class ShadersListener {
    }
 
    @SubscribeEvent
-   public void onClientTick(TickEvent.ClientTickEvent event) {
-      if (event.phase != Phase.END && BlockOverlay.instance.getMc().field_71439_g != null) {
-         if (this.canCheck && !this.isShadersGui(BlockOverlay.instance.getMc().field_71462_r)) {
+   public void onTick(TickEvent.ClientTickEvent event) {
+      if (event.phase != TickEvent.Phase.END && BlockOverlay.instance.getMc().thePlayer != null) {
+         if (this.canCheck && !this.isShadersGui(BlockOverlay.instance.getMc().currentScreen)) {
             this.canCheck = false;
             this.checkShaders();
          }
-
       }
    }
 
    private void checkShaders() {
       boolean shaders = false;
-      File shadersConfig = new File(BlockOverlay.instance.getMc().field_71412_D, "optionsshaders.txt");
+      File shadersConfig = new File(BlockOverlay.instance.getMc().mcDataDir, "optionsshaders.txt");
       if (shadersConfig.exists()) {
          try {
             BufferedReader reader = new BufferedReader(new FileReader(shadersConfig));

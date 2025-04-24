@@ -1,27 +1,35 @@
 package com.ootruffle.blockoverlay.utils;
 
-import com.ootruffle.blockoverlay.utils.enums.RenderMode;
-
 import java.util.Arrays;
 
 public class EnumUtils {
-   public EnumUtils() {
-   }
+   public EnumUtils() {}
 
+   // Get the ordinal value of an enum by name
    public static <T extends Enum<T>> int getOrdinal(Class<T> clazz, String name) {
-      return fromName(clazz, name).ordinal();
+      T enumValue = fromName(clazz, name);
+      return (enumValue != null) ? enumValue.ordinal() : -1;
    }
 
+   // Get the next enum value in a circular manner
    public static <T extends Enum<T>> T getNext(Class<T> clazz, String name) {
-      T[] enums = (T[])(clazz.getEnumConstants());
-      return (T)enums[(fromName(clazz, name).ordinal() + 1) % enums.length];
+      T[] enums = clazz.getEnumConstants();
+      T enumValue = fromName(clazz, name);
+      if (enumValue == null) return enums[0]; // Default to the first enum if not found
+      return enums[(enumValue.ordinal() + 1) % enums.length];
    }
 
-   public static <T extends Enum<T>> T fromName(Class<RenderMode> clazz, boolean name) {
-      return (T)Enum.valueOf(clazz, name);
+   // Find an enum by name
+   public static <T extends Enum<T>> T fromName(Class<T> clazz, String name) {
+      try {
+         return Enum.valueOf(clazz, name);
+      } catch (IllegalArgumentException e) {
+         return null; // Return null if the name isn't valid
+      }
    }
 
+   // Get all enum names
    public static String[] getNames(Class<? extends Enum<?>> clazz) {
-      return (String[])Arrays.stream(clazz.getEnumConstants()).map(Enum::toString).toArray((x$0) -> new String[x$0]);
+      return Arrays.stream(clazz.getEnumConstants()).map(Enum::name).toArray(String[]::new);
    }
 }

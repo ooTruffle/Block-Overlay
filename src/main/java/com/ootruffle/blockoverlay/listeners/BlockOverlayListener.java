@@ -4,7 +4,6 @@ import com.ootruffle.blockoverlay.config.ModConfig;
 import com.ootruffle.blockoverlay.utils.Animator;
 import com.ootruffle.blockoverlay.utils.EnumUtils;
 import com.ootruffle.blockoverlay.utils.RenderUtils;
-import com.ootruffle.blockoverlay.utils.enums.RenderMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -42,11 +41,11 @@ public class BlockOverlayListener {
 
    @SubscribeEvent
    public void onRenderBlockOverlay(DrawBlockHighlightEvent event) {
-      RenderMode renderMode = EnumUtils.fromName(RenderMode.class, ModConfig.renderMode);
-      if (renderMode == RenderMode.HIDDEN) {
+      String renderSide = ModConfig.renderSide;
+      if ("HIDDEN".equals(renderSide)) {
          event.setCanceled(true);
          return;
-      } else if (renderMode == RenderMode.VANILLA) {
+      } else if ("FULL".equals(renderSide)) {
          renderBlockBreakOverlay(event.player, event.partialTicks);
       } else {
          event.setCanceled(true);
@@ -57,8 +56,8 @@ public class BlockOverlayListener {
    public void onRenderBlockOverlay(RenderWorldLastEvent event) {
       Entity entity = mc.getRenderViewEntity();
       if (entity != null) {
-         RenderMode renderMode = EnumUtils.fromName(RenderMode.class, ModConfig.renderMode);
-         if (renderMode == RenderMode.SIDE || renderMode == RenderMode.FULL) {
+         String renderSide = ModConfig.renderSide;
+         if ("SIDE".equals(renderSide) || "FULL".equals(renderSide)) {
             Block block = getFocusedBlock();
             if (block != null) {
                renderBlockOverlay(block, entity, event.partialTicks);
@@ -94,7 +93,9 @@ public class BlockOverlayListener {
       GlStateManager.disableDepth();
 
       GL11.glLineWidth((float) thickness);
-      RenderUtils.drawBlockOverlay(boundingBox.offset(-entityX, -entityY, -entityZ), overlayColor, outline);
+      RenderUtils.drawBlockSide(boundingBox.offset(-entityX, -entityY, -entityZ), null /* EnumFacing is not used here */,
+              new Color(overlayColor, true), new Color(overlayColor, true),
+              new Color(overlayColor, true), new Color(overlayColor, true), true, true);
 
       GlStateManager.enableDepth();
       GlStateManager.disableBlend();
@@ -120,7 +121,7 @@ public class BlockOverlayListener {
    private void renderBlockBreakOverlay(Entity entity, float partialTicks) {
       GlStateManager.enableBlend();
       GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-      mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+      mc.getTextureManager().bindTexture(null); // Replace with actual texture if needed
       mc.renderGlobal.drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getWorldRenderer(), entity, partialTicks);
       GlStateManager.disableBlend();
    }

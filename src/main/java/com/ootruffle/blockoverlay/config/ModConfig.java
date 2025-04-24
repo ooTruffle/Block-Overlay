@@ -50,12 +50,12 @@ public class ModConfig extends Config {
     )
     public static boolean enableBarriers = false;
 
-    @DualOption(
-            name = "Render Mode",
-            left = "VANILLA",
-            right = "CUSTOM"
+    @Dropdown(
+            name = "Render Side",
+            options = {"FULL", "SIDE", "HIDDEN"}
     )
-    public static boolean renderMode = false; // false = VANILLA, true = CUSTOM
+    public static String renderSide = "FULL"; // Default value is "FULL"
+
     public static boolean outlineEnabled;
 
     public ModConfig() {
